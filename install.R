@@ -5,4 +5,5 @@ install.packages("magrittr")
 install.packages("rmarkdown")
 install.packages("knitr")
 install.packages("glmnet")
+install.packages("gglasso")
 
