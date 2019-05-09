@@ -1,0 +1,1803 @@
+\documentclass{beamer}
+
+\usepackage{default}
+\usepackage{animate} %need the animate.sty file 
+\usepackage{graphicx}
+%\graphicspath{{/home/sahir/Dropbox/jobs/laval/minicours/slides/}}
+\usepackage{hyperref, url}
+%\usepackage[round,sort]{natbib}   % bibliography omit 'round' option if you prefer square brackets
+%\bibliographystyle{apalike}
+\usepackage{biblatex}
+\bibliography{bib.bib}
+% Removes icon in bibliography
+\setbeamertemplate{bibliography item}[text]
+
+\newcommand{\bh}{\hat{\beta}}
+\usepackage{subfig}
+\usepackage{tikz, pgfplots}
+\usetikzlibrary{arrows,shapes.geometric}
+\usepackage{color, colortbl,xcolor}
+\definecolor{lightgray}{RGB}{200,200,200}
+\definecolor{myblue}{RGB}{0,89,179}
+\usepackage{comment}
+\setbeamercolor{frametitle}{fg=myblue}
+\setbeamercolor{section in head/foot}{bg=myblue, fg=white}
+\setbeamercolor{author in head/foot}{bg=myblue}
+\setbeamercolor{date in head/foot}{bg=myblue}
+
+\usepackage{array}
+\newcolumntype{L}{>{\centering\arraybackslash}m{3cm}} % used for text wrapping in ctable
+\usepackage{ctable}
+\usepackage[utf8]{inputenc}
+\usepackage{fontenc}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+\def\widebar#1{\overline{#1}}
+\definecolor{whitesmoke}{rgb}{0.96, 0.96, 0.96}
+\definecolor{darktangerine}{rgb}{1.0, 0.66, 0.07}
+
+\usepackage{fontspec}
+%\setsansfont{Fira Sans}
+%\setmonofont{Fira Mono}
+\setsansfont[ItalicFont={Fira Sans Light Italic},BoldFont={Fira Sans},BoldItalicFont={Fira Sans Italic}]{Fira Sans Light}
+\setmonofont[BoldFont={Fira Mono Medium}]{Fira Mono}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator{\diag}{diag} % operator and subscript
+
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds,intersections,fit}
+\tikzset{isometricYXZ/.style={x={(1cm,0cm)}, y={(-1.299cm,-0.75cm)}, z={(0cm,1cm)}}}
+\newcommand*\ab{.4}
+
+\setbeamercolor{itemize item}{fg=myblue}
+\setbeamertemplate{itemize item}[square]
+
+\setbeamertemplate{navigation symbols}{\usebeamercolor[fg]{title in head/foot}\usebeamerfont{title in head/foot}\insertframenumber}
+\setbeamertemplate{footline}{}
+
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{exercise}[theorem]{Exercise}
+
+\titlegraphic{\hfill\includegraphics[height=1cm]{mcgill_logo.png}}
+
+\global\long\def\bbeta{\boldsymbol{\beta}}
+\global\long\def\bOmega{\boldsymbol{\Omega}}
+\global\long\def\bX{\mathbf{X}}
+\global\long\def\bx{\mathbf{x}}
+\global\long\def\trans{\intercal}
+\global\long\def\bI{\mathbf{\mathbf{I}}}
+\global\long\def\bH{\mathbf{H}}
+\global\long\def\bQ{\mathbf{Q}}
+\global\long\def\bD{\mathbf{D}}
+\global\long\def\bGa{\mathbf{\boldsymbol{\Gamma}}}
+\global\long\def\rnp{\mathbb{R}^{n\times p}}
+\global\long\def\rpp{\mathbb{R}^{p\times p}}
+\global\long\def\r{\mathbb{R}}
+\global\long\def\rn{\mathbb{R}^{n}}
+\global\long\def\rp{\mathbb{R}^{p}}
+\global\long\def\xx{\mathbf{X}^{T}\mathbf{X}}
+\global\long\def\lpp{\lambda_{pp}}
+\global\long\def\l{\lambda_{11}}
+\global\long\def\ll{\lambda_{22}}
+\global\long\def\xy{\mathbf{X}^{T}\mathbf{y}}
+\global\long\def\xxb{\mathbf{X}^{T}\mathbf{X}\beta}
+\global\long\def\ixx{(\mathbf{X}^{T}\mathbf{X})^{-1}}
+\global\long\def\bh{\widehat{\bbeta}}
+\global\long\def\bbeta{\boldsymbol{\beta}}
+\global\long\def\ols{\xx\hat{\beta}=\xy}
+\global\long\def\ddd{,\ldots,}
+\global\long\def\spz{\mathbb{S}_{0}^{p}}
+\global\long\def\spp{\mathbb{S}_{+}^{p}}
+\global\long\def\ftr{f:\Theta\rightarrow\r}
+\global\long\def\tinr{\Theta\in\r}
+\global\long\def\tkp{\theta^{(k+1)}}
+\global\long\def\tk{\theta^{(k)}}
+\global\long\def\dk{d^{(k)}}
+\global\long\def\amin{\arg\min}
+\global\long\def\uinr{u\in\r}
+\global\long\def\nf{\nabla f(\tk)}
+\global\long\def\bt{\boldsymbol{\theta}}
+\global\long\def\ntf{\nabla^{2}f(\tk)}
+\global\long\def\tb{\bar{\theta}}
+\global\long\def\tjk{\theta^{j(k)}}
+\global\long\def\tjko{\theta^{j(k+1)}}
+\global\long\def\jk{j(k)}
+\global\long\def\muk{\boldsymbol{\mu}_{k}}
+\global\long\def\sk{\boldsymbol{\Sigma}_{k}}
+\global\long\def\bx{\mathbf{x}}
+\global\long\def\by{\mathbf{y}}
+\global\long\def\bz{\mathbf{z}}
+\global\long\def\sumn{\sum_{n=1}^{N}}
+\global\long\def\sumk{\sum_{k=1}^{K}}
+\global\long\def\cA{\mathcal{A}}
+
+
+\newcommand{\bbk}{\boldsymbol{\beta}_{(k)}}
+\newcommand{\bbkt}{\widetilde{\boldsymbol{\beta}}_{(k)}}
+\newcommand{\bgamma}{\boldsymbol{\gamma}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\bPhi}{\boldsymbol{\Phi}}
+\newcommand{\bPsi}{\boldsymbol{\Psi}}
+\newcommand{\bY}{\textbf{Y}}
+\newcommand{\bW}{\textbf{W}}
+\newcommand{\bU}{\textbf{U}}
+\newcommand{\be}{\boldsymbol{\varepsilon}}
+\newcommand{\bSigma}{\boldsymbol{\Sigma}}
+\newcommand{\bLambda}{\boldsymbol{\Lambda}}
+\newcommand{\bTheta}{\boldsymbol{\Theta}}
+\newcommand{\balpha}{\boldsymbol{\alpha}}
+
+%\newcommand{\bI}{\mathbcal{I}}
+%\DeclareMathOperator*{\argmin}{arg\,min}
+%\DeclareMathOperator*{\argmax}{arg\,max}
+%\DeclareMathOperator{\diag}{diag} % operator and subscript
+
+\newcommand\blfootnote[1]{%
+	\begingroup
+	\renewcommand\thefootnote{}\footnote{#1}%
+	\addtocounter{footnote}{-1}%
+	\endgroup
+}
+
+%% You also use hyperref, and pick colors 
+\hypersetup{colorlinks,citecolor=orange,filecolor=red,linkcolor=brown,urlcolor=blue}
+
+\newcommand {\framedgraphiccaption}[2] {
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth,height=0.6\textheight,keepaspectratio]{#1}
+		\caption{#2}
+	\end{figure}
+}
+
+\newcommand {\framedgraphic}[1] {
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth,height=0.9\textheight,keepaspectratio]{#1}
+	\end{figure}
+}
+
+
+\AtBeginSection[]{
+	\begin{frame}
+		\vfill
+		\centering
+		\begin{beamercolorbox}[sep=8pt,center,shadow=true,rounded=true]{title}
+			\usebeamerfont{title}\insertsectionhead\par%
+		\end{beamercolorbox}
+		\vfill
+	\end{frame}
+}
+
+\newcommand\Wider[2][3em]{%
+	\makebox[\linewidth][c]{%
+		\begin{minipage}{\dimexpr\textwidth+#1\relax}
+			\raggedright#2
+		\end{minipage}%
+	}%
+}
+
+\usepackage[figurename=Fig.]{caption}
+\setbeamertemplate{caption}[numbered]
+
+\definecolor{deepink}{RGB}{255,20,147}
+
+\begin{document}
+%\sffamily
+
+<<setup, include=FALSE>>=
+rm(list = ls())
+knitr::opts_chunk$set(cache=TRUE, message = FALSE, tidy = FALSE, echo = FALSE, fig.width = 6, fig.asp = 0.618, 
+fig.align = 'center', out.width = "100%", size = 'scriptsize')
+pacman::p_load(knitr)
+pacman::p_load(tidyr)
+pacman::p_load(dplyr)
+pacman::p_load(lme4)
+pacman::p_load("sjstats")
+pacman::p_load("sjPlot")
+pacman::p_load(mosaic)
+# pacman::p_load(ISLR)
+# pacman::p_load(data.table)
+# pacman::p_load(rpart)
+# pacman::p_load(rpart.plot)
+# pacman::p_load(xtable)
+# pacman::p_load(ggplot2)
+# trop <- RSkittleBrewer::RSkittleBrewer("trop")
+# gg_sy <- theme(legend.position = "bottom", axis.text = element_text(size = 20), axis.title = element_text(size = 20), legend.text = element_text(size = 20), legend.title = element_text(size = 20))
+@
+
+%\title{Introduction to Regression Trees}
+%\author{Sahir Bhatnagar \inst{1}}
+%\author[shortname]{Sahir Rai Bhatnagar, PhD Candidate (Biostatistics) }
+%\institute[shortinst]{Department of Epidemiology, Biostatistics and Occupational Health}
+
+\title{High-dimensional data analysis using penalized regression methods}
+\author{Sahir Rai Bhatnagar}
+\institute{
+	Department of Epidemiology, Biostatistics, and Occupational Health\\
+	Department of Diagnostic Radiology\\
+	%McGill University\\
+	
+	\vspace{0.1 in}
+	
+	%\texttt{sahir.bhatnagar@mcgill.ca}\\
+	\texttt{\url{https://sahirbhatnagar.com/}}}
+
+\date{McGill Summer School in Health Data Analytics \\ May 8, 2019}
+
+\maketitle
+
+%\section{About me}
+
+\begin{frame}{Outline}
+\begin{itemize}
+		  \setlength\itemsep{1.2em}
+	\item Les modèles classiques 
+	\item Miser sur la sparsité
+	 \item Un exemple justificatif
+	 \item Contexte de la méthode lasso
+	 \item Extensions 
+\end{itemize}
+
+%\pause
+%\Wider[4em]{
+%	\centering
+%	\includegraphics[scale=0.35]{MeansFig1.png}
+%}
+
+\end{frame}
+
+
+\section{Classical Methods}
+
+\begin{frame}{Setting}
+\begin{itemize}
+	\item This lecture concerns the analysis of data in which we are	attempting to predict an outcome $Y$ using a number of explanatory factors $X_1$, $X_2$, $X_3$, $\ldots$, some of which may not be
+	particularly useful \pause 
+	\item Although the methods we will discuss can be used solely for prediction (i.e., as a ``black box''), I will adopt the perspective
+	that we would like the statistical methods to be interpretable and to explain something about the relationship between the $X$ and $Y$ \pause 
+	\item Regression models are an attractive framework for approaching problems of this type, and the focus today will be on extending classical regression modeling to deal with high-dimensional data
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}{Classical Methods}
+\small
+
+\begin{itemize}
+	\item A nice and powerful toolbox for analyzing the more traditional datasets
+where the sample size ($N$) is far \textbf{greater than} the number
+of covariates ($p$):
+
+\begin{itemize}
+	\item linear regression, logistic regression, LDA, QDA, glm,
+	\item regression spline, smoothing spline, kernel smoothing, local smoothing,
+	GAM,
+	\item Neural Network, SVM, Boosting, Random Forest, ...
+\end{itemize}
+\end{itemize}
+
+%\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+%	\small
+%	\column{.45\textwidth} % Left column and width
+\pause
+\vspace{-0.15in}
+
+\begin{itemize}
+	\item[] $$
+	\mathbf{X}_{n\times p} = \left[\begin{matrix}
+	x_{11} & x_{12} &  \cdots & x_{1p}\\
+	x_{21} & x_{12} &  \cdots & x_{1p}\\
+	x_{31} & x_{12} &  \cdots & x_{1p}\\
+	\vdots & \vdots & \vdots & \vdots\\
+	\vdots & \vdots & \vdots & \vdots\\
+	\vdots & \vdots & \vdots & \vdots\\
+	\vdots & \vdots & \vdots & \vdots\\
+	\vdots & \vdots & \vdots & \vdots\\
+	x_{n1} & x_{12} &  \cdots & x_{np}\\
+	\end{matrix}
+	\right]
+	$$
+	%\item \underline{Données de grande dimension} ($n << p$) $$
+	%X_{n\times p} = \left[\begin{matrix}
+	%x_{11} & x_{12} &  \cdots & \cdots & \cdots & \cdots & x_{1p}\\
+	%\vdots & \vdots & \vdots & \vdots & \vdots & \vdots &\vdots \\
+	%x_{n1} & x_{12} &  \cdots &\cdots &\cdots &\cdots & x_{np}\\
+	%\end{matrix}
+	%\right]
+	%$$
+\end{itemize}
+
+%	\column{.4\textwidth} % Right column and width
+%	\begin{figure}
+%	\begin{itemize}
+%	\item Données à petite échelle
+%\end{itemize}
+%\vspace{1in}
+%	\begin{itemize}
+%	\item 
+%\end{itemize}
+
+%	\end{figure}
+
+%\end{columns}
+
+\end{frame}
+
+
+
+\begin{frame}
+\centering
+\framedgraphic{iris-dataset}
+\end{frame}
+
+
+\begin{frame}{Classical Linear Regression}
+
+Data: $(\mathbf{x}_{1},y_{1})\ddd(\mathbf{x}_{n},y_{n})$ iid from
+\[
+y=\mathbf{x}^{T}\bbeta+\epsilon
+\]
+where $E(\epsilon|\mathbf{x})=0$, and $\mathrm{dim}(x)=p$. To include
+an intercept, we can set $\mathbf{x}_{1}\equiv1$. Using Matrix notation:
+\[
+\mathbf{y}=\bX\bbeta+\epsilon
+\]
+The least squares estimator
+\[
+\widehat{\bbeta}_{LS}=\amin_{\bbeta}\|\mathbf{y}-\bX\bbeta\|^{2}
+\]
+\[
+\widehat{\bbeta}_{LS}=\ixx\xy
+\]
+
+\pause
+
+\begin{itemize}
+	\item \textbf{Question:} How to find the important variables $\mathbf{x}_j$?
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Best-subset Selection \mbox{(Beal et al. 1967, Biometrika)}}
+
+\centering
+\framedgraphic{subset.png}
+
+\end{frame}
+
+\begin{frame}{Which variables are important?}
+\begin{itemize}
+	\item Scientists know only a small subset of variables (such as genes) are
+	important for the response variable. 
+	\item \alert{An old Idea: try all possible subset models and pick the best one.}
+	\item Fit a subset of predictors to the linear regression model. Let S be
+	the subset predictors, e.g., S = \{1, 3, 7\}.
+	\[
+	C_{p}=\frac{\mathrm{RSS}_{S}}{\sigma^{2}}-(n-2|S|)=\frac{\mathrm{RSS}_{S}}{\sigma^{2}}+2|S|-n
+	\]
+	\item We pick the model with the smallest $C_{p}$ value.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Model selection criteria}
+
+Minimizing $C_{p}$ is equivalent to minimizing
+\[
+\|\by-\bX_{S}\widehat{\bbeta}_{S}\|^{2}+2|S|\sigma^{2}.
+\]
+which is AIC score. 
+
+Many popular model selection criteria can be written as
+\[
+\|\by-\bX_{S}\widehat{\bbeta}_{S}\|^{2}+\lambda|S|\sigma^{2}.
+\]
+
+\begin{itemize}
+	\item BIC uses $\lambda=\sigma\sqrt{\log(n)/n}$.
+	%\item RIC uses $\lambda=\sigma\sqrt{\log(p)/n}$.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Remarks}
+
+Best subset selection plus model selection criteria (AIC, BIC,
+etc.) 
+\begin{itemize}
+	\item Computing all possible subset models is a combinatorial optimization
+	problem (NP hard) 
+	\item Instability in the selection process (Breiman, 1996) 
+\end{itemize}
+%\alert{Not a good idea for high-dimensional data analysis. }\\
+%\structure{A good alternative is via penalized estimation.}
+\end{frame}
+
+\begin{comment}
+\begin{frame}{Best-subset Selection \mbox{(Beal et al. 1967, Biometrika)}}
+\begin{itemize}
+\setlength\itemsep{1.2em}
+	\item $\widehat{\boldsymbol{\beta}} = \argmin_{\boldsymbol{\beta}} || \mathbf{y} - \mathbf{X}\boldsymbol{\beta} || ^2 + \lambda ||\boldsymbol{\beta}||_0$
+	
+	\item $|| \boldsymbol{\beta}||_0 = \sum_{j=1}^{p}1 \left\lbrace \beta_j \neq 0 \right\rbrace $
+	
+	\item $\lambda \geq 0$ is a tuning parameter that controls the size of the model
+	
+	 \pause
+	\item Computing all possible subset models is a combinatorial optimization problem (NP hard)
+	\pause 
+	\item Instability in the selection process (Breiman, 1996)
+	
+\end{itemize}
+
+\end{frame}
+\end{comment}
+
+
+\begin{frame}{Ridge Regression \mbox{(Hoerl \& Kennard 1970, Technometrics)}}
+\begin{itemize}
+	\setlength\itemsep{1.2em}
+	\item $\widehat{\boldsymbol{\beta}} = \argmin_{\boldsymbol{\beta}} || \mathbf{y} - \mathbf{X}\boldsymbol{\beta} || ^2 + \lambda ||\boldsymbol{\beta}||_2^2$
+	
+	\item $|| \boldsymbol{\beta}||_2^2 = \sum_{j=1}^{p} \beta_j^2 $ 
+	
+	\pause
+	
+	\item $\widehat{\boldsymbol{\beta}}_{Ridge} = (\mathbf{X}^\top \mathbf{X} + \textcolor{blue}{\lambda\mathbf{I}})^{-1} \mathbf{X}^\top \mathbf{y}$ $\rightarrow$ exact solution
+	
+		\item $\widehat{\boldsymbol{\beta}}_{LS} = (\mathbf{X}^\top \mathbf{X})^{-1} \mathbf{X}^\top \mathbf{y}$ \pause 
+		
+		\item Let $\mathbf{X}^\top \mathbf{X}=\mathbf{I}_{p \times p}$ 
+		\pause 
+		\[\hat{\beta_j}_{(Ridge)} = \frac{\hat{\beta_j}_{(MCO)}}{1 + \lambda}\]
+	
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Least squares vs. Ridge}
+\framedgraphic{ridge.png}
+\end{frame}
+
+
+
+\begin{frame}{High-dimensional data ($n << p$)}
+\small
+
+
+\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
+	\small
+	\column{.45\textwidth} % Left column and width
+	
+	\vspace{-0.1in}
+	
+	
+	\includegraphics[scale=0.4]{dogma.jpg}
+	
+	
+	
+	$$
+	\mathbf{X}_{n\times p} = \left[\begin{matrix}
+	x_{11} & x_{12} &  \cdots & \cdots & \cdots & \cdots &\cdots &\cdots &\cdots  & x_{1p}\\
+	\vdots & \vdots & \vdots & \vdots & \vdots & \vdots &\vdots &\vdots &\vdots  & \vdots \\
+	x_{n1} & x_{12} &  \cdots &\cdots &\cdots &\cdots & \cdots &\cdots &\cdots  & x_{np} \\
+	\end{matrix}
+	\right]
+	$$
+	
+	\column{.4\textwidth} % Right column and width
+	
+	\vspace{-0.7in}
+	
+	\includegraphics[scale=0.2]{brains.png}
+	
+	
+	
+	
+\end{columns}
+
+\end{frame}
+
+
+\begin{frame}{Why can't we fit OLS to High-dimensional data?}
+\centering
+	\includegraphics[scale=0.4]{overfit.png}
+	\blfootnote{Boulesteix et al., Human Genetics, 2019}	
+\end{frame}
+
+
+\begin{frame}{High-dimensional data ($n << p$)}
+\begin{itemize}\setlength\itemsep{1.2em}
+	\item Throughout the course, we will let
+	\begin{itemize}
+		\item $n$ denote the number of independent sampling units (e.g., number of patients)
+	\item $p$ denote the number of features recorded for each unit
+	\end{itemize} \pause 
+	\item In high-dimensional data, $p$ is large with respect to $n$
+	\begin{itemize}
+		\item This certainly includes the case where $p > n$ \pause 
+	\item However, the ideas we discuss in this course are also relevant to many situations in which $p < n$; for example, if $n = 100$ and
+	$p = 80$, we probably don't want to use ordinary least squares
+	\end{itemize}
+
+\end{itemize}
+\end{frame}
+
+\begin{frame}{A fundamental picture for data science}
+\small
+
+\includegraphics[scale=0.25]{tradeoff.png}
+
+	\blfootnote{ESL, Hastie et al. 2009}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+\section{Betting on Sparsity}\label{bet-on-sparsity}
+
+\begin{frame}{Bet on Sparsity Principle}
+
+\begin{center}
+	\resizebox{225pt}{!}{
+		\begin{tikzpicture}[shorten >=1pt,->,draw=black!50, node distance=\layersep]
+		\tikzstyle{every pin edge}=[<-,shorten <=1pt]
+		\tikzstyle{net node} = [circle, minimum width=2*\ab cm, inner sep=0pt, outer sep=0pt, ball color=orange!100!cyan];
+		\tikzstyle{neuron}=[circle,fill=black!25,minimum size=17pt,inner sep=0pt]
+		\tikzstyle{input neuron}=[neuron, fill=green!50];
+		\tikzstyle{output neuron}=[neuron, fill=red!50];
+		\tikzstyle{hidden neuron}=[neuron, fill=blue!50];
+		\tikzstyle{annot} = [text width=4em, text centered]
+		
+		\node[draw=white,circle,minimum size=30mm,inner sep=0pt,fill=white, name=response2] at (0:0) {$Y$};
+		\node[draw,circle,minimum size=15mm,fill=darktangerine, name=response] at (0:0) {\Huge $Y$};
+		\foreach [count=\i] \a in {0, 5,...,359} 
+		{
+			\pgfmathsetmacro\k{mod(\i+\i-1,60)*1}  
+			\node[draw,circle,inner sep=0pt,minimum size=1pt,fill=myblue!\k!white, name=c\i] at (\a: 7.5) {$X_{\i}$};
+			\draw[color = gray, thin, ->, >=stealth'] (c\i) -- (response2);
+		}
+		\pause
+		\foreach [count=\i] \f in {72,31,62,60} 
+		{
+			\draw[color = deepink, line width=0.75mm, ->, >=stealth'] (c\f) -- (response2);
+		}
+		\end{tikzpicture}
+	}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Bet on Sparsity Principle}
+
+\vspace*{-0.35cm}
+\begin{center}
+\large{\textbf{Use a procedure that does well in sparse problems, since no procedure does well in dense problems.}}\footnote<.->{\scriptsize{The elements of statistical learning. Springer series in statistics, 2001.}}
+\end{center}
+
+\pause 
+
+\normalsize
+
+\vspace*{0.35cm}
+
+\begin{itemize}
+\setlength\itemsep{1.2em}
+
+\item We often don't have enough data to estimate so many parameters
+%\item An underlying assumption of \textbf{\alert{simplicity}} in high-dimensional data ($N << p$)  
+
+\item Even when we do, we might want to identify a \textbf{\alert{relatively small number of predictors}} ($k < N$) that play an important role
+
+%\item A sparse statistical model is one in which only a \textbf{\alert{relatively small number of predictors}} ($k < N$) play an important role
+
+
+\item Faster computation, easier to understand, and stable predictions on new datasets.
+
+%\item In practical, betting on sparsity can simply our lives
+
+\end{itemize}
+
+\end{frame}
+
+
+\section{A Thought Experiment}
+
+
+\begin{frame}{How would you schedule a meeting of 20 people?}
+
+\pause
+\framedgraphic{doodlepoll.PNG}
+\end{frame}
+
+
+
+\begin{frame}{Doctors Bet on Sparsity Also}
+
+\pause
+\framedgraphic{doctor.jpg}
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%                    MOTIVATING EXAMPLE                     %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\section{Motivating Example}\label{motivating-example}
+
+\begin{frame}{Predictors of NHL Salary\footnote<.->{\scriptsize{https://www.kaggle.com/camnugent/nhl-salary-data-prediction-cleaning-and-modelling}}}
+
+\centering
+\includegraphics[scale = 0.6]{predictors-crop}
+
+\end{frame}
+
+\begin{frame}{Supervised Learning}
+
+\begin{itemize}
+\item Learn the function $f$
+\end{itemize}
+
+\begin{center}
+\includegraphics[scale = 0.5]{hec}
+\end{center}
+
+\end{frame}
+
+\begin{frame}{Predictors of NHL Salary}
+
+\framedgraphic{all_hockey}
+
+\end{frame}
+
+\begin{frame}{Predictors of NHL Salary}
+
+\framedgraphic{all_hockey2}
+
+\end{frame}
+
+\begin{frame}{OLS vs.~Lasso Coefficients}
+
+\centering
+\includegraphics[width=\textwidth]{mco_vs_lasso}
+
+\end{frame}
+
+\begin{frame}{Lasso Selected Predictors}
+
+\centering
+\includegraphics[width=\textwidth]{hockey-model}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%                    BACKGROUND ON THE LASSO                %%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Background on the lasso \mbox{(Tibshirani. \textit{JRSSB}, 1996)} }
+
+\begin{frame}{Bridge regression (Frank and Friedman, 1993)}
+
+\[
+\min_{\bbeta}\frac{1}{2}\|\by-\bX\bbeta\|^{2}+\lambda\|\bbeta\|_{q}\qquad0\leq q\leq2.
+\]
+Its constrained formulation
+\begin{align*}
+& \min_{\bbeta}\frac{1}{2}\|\by-\bX\bbeta\|^{2}\\
+& \text{subject to\ }\|\bbeta\|_{q}=\sum_{j=1}^{p}|\beta_{j}|^{q}\leq s
+\end{align*}
+\end{frame}
+%
+\begin{frame}{Bridge regression (Frank and Friedman, 1993)}
+\begin{center}
+\includegraphics[scale=0.4]{qp}\\
+Contours of equal value for the $L_{q}$ penalty for difference values
+of $q$. For $q<1$, the constraint region is \textbf{nonconvex}. 
+\par\end{center}
+\begin{itemize}
+\item $q=0$, $\|\bbeta\|_{0}=\sum_{j=1}^{p}|\beta_{j}|^{0}=\sum_{j=1}^{p}I(\beta_{j}\neq0)$ 
+\item $q=1$, $\|\bbeta\|_{1}=\sum_{j=1}^{p}|\beta_{j}|$ convex
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Background on the Lasso}
+
+\begin{itemize}
+	\item Predictors $x_{ij}$, $j=1, \ldots, p$ and outcome values $y_i$ for the $i$th observation, $i=1, \ldots, n$ 
+	\item Assume $x_{ij}$ are standardized so that $\sum_i x_{ij}/n = 0$ and $\sum_i x_{ij}^2=1$. \pause The lasso$^1$ solves 
+	\begin{align*}
+	\widehat{\boldsymbol{\beta}}^{lasso} & = \argmin_{\beta} \frac{1}{2} \sum_{i=1}^{n} \left( y_i - \sum_{j=1}^p x_{ij}\beta_j \right)^2 \\
+	\text{subject to } & \sum_{j=1}^p |\beta_j| \leq \textcolor{deepink}{s}, \qquad s > 0
+	\end{align*}
+	\pause \item Equivalently, the Lagrange version of the problem, for $\lambda>0$
+	\begin{align*}
+	\widehat{\boldsymbol{\beta}}^{lasso} & = \argmin_{\beta} \frac{1}{2} \sum_{i=1}^{n} \left( y_i - \sum_{j=1}^p x_{ij}\beta_j \right)^2  + \textcolor{deepink}{\lambda} \sum_{j=1}^p |\beta_j|
+	\end{align*}
+\end{itemize}
+
+\footnotetext[1]{\scriptsize{Tibshirani. JRSSB (1996)}}
+
+\end{frame}
+
+\begin{frame}{Inspection of the Lasso Solution}
+
+\begin{itemize}
+\item Consider a single predictor setting based on the observed data $\lbrace(x_i,y_i) \rbrace_{i=1}^n$. The problem then is to solve
+\begin{align}
+\widehat{\beta}^{lasso} & = \argmin_{\beta} \frac{1}{2} \sum_{i=1}^{n} \left( y_i - x_{i}\beta \right)^2  + \lambda |\beta| \label{eq:lassoone}
+\end{align} \pause 
+\item With a \textbf{\alert{standardized}} predictor, the lasso solution \eqref{eq:lassoone} is a \textbf{soft-thresholded} version of the least-squares (LS) estimate $\widehat{\beta}^{LS}$  
+\begin{align*}
+\widehat{\beta}^{lasso} & = S_{\lambda}\left( \widehat{\beta}^{LS} \right)= \text{sign}\left( \widehat{\beta}^{LS} \right) \left( |\widehat{\beta}^{LS}| - \lambda \right)_{+} \\  
+& = \begin{cases} \widehat{\beta}^{LS} - \lambda, &  \widehat{\beta}^{LS} > \lambda \\
+0 & |\widehat{\beta}^{LS}|  \leq \lambda \\
+\widehat{\beta}^{LS} + \lambda & \widehat{\beta}^{LS} \leq -\lambda \\
+\end{cases}
+\end{align*}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Inspection of the Lasso Solution}
+
+\begin{itemize}
+\item When the data are standardized, the lasso solution \textbf{shrinks the LS estimate toward zero} by the amount $\lambda$
+\end{itemize}
+
+\vspace*{0.2cm}
+
+\centering
+\includegraphics[scale=0.30]{ols_vs_lasso.pdf}
+
+\footnotetext[1]{\scriptsize{Hastie et al. Statistical learning with sparsity: the lasso and generalizations}}
+
+\end{frame}
+
+\begin{frame}{Why the $\ell_1$ norm?}
+
+\begin{itemize}
+	\item For $q \geq 0$, evaluate the criteria
+	$$
+	\widetilde{\boldsymbol{\beta}} = \argmin_{\boldsymbol{\beta}} \left\lbrace \sum_{i=1}^{n} \left(y_i - \beta_0 - \sum_{j=1}^p x_{ij}\beta_j \right)^2 + \lambda \sum_{j=1}^p |\beta_j|^q \right\rbrace
+	$$
+	
+	
+	\item Why do we use the $\ell_1$ and not $q=2$ (Ridge) or any other norm $\ell_q$?  
+	
+	\begin{center}
+		\includegraphics[scale=0.25]{regions.png}
+	\end{center}
+	
+	
+	\item $q=1$ is the smallest value which gives sparse solutions \alert{AND} is \textbf{convex} $\to$ scales well to high-dimensions
+	\item For $q <1$ the constrained region is \textbf{not-convex}
+\end{itemize}
+
+\end{frame}
+
+%\begin{comment}
+\begin{frame}{Choosing Model Complexity}
+
+\begin{center}
+\animategraphics[controls,scale=0.3]{1}{/home/sahir/Dropbox/yi_yang/lasso_animation/plots/path_}{1}{100}
+\end{center}
+
+\end{frame}
+%\end{comment}
+
+
+\begin{frame}{Least-squares regression surface}
+\small
+\begin{itemize}
+	\item Consider the following model with two predictors ($\mathbf{y}$ is centered)
+\end{itemize}
+
+\[\mathbf{y} = \beta_1 \mathbf{x}_1 + \beta_2 \mathbf{x}_2 + \boldsymbol{\varepsilon}\]
+
+
+\centering
+\includegraphics[scale=0.35]{wireframe}
+\end{frame}
+
+\begin{frame}[fragile]{code to generate previous plot}
+<<eval=FALSE, echo=TRUE, size='tiny'>>=
+pacman::p_load(viridis,fields,lattice,latex2exp,plotrix)
+
+set.seed(12345)
+b0 <- 0
+b1 <- 1
+b2 <- 2
+X <- cbind(1,replicate(2, rnorm(100)))
+y <- X %*% matrix(c(b0,b1,b2)) + sqrt(2)*rnorm(100)
+
+# Define function for RSS
+MyRss <- function(beta0, beta1) {
+	b <- c(0, beta0, beta1)
+	rss <- crossprod(y - X %*% b)
+	return(rss)
+}
+
+b0 <- seq(-3, 4, by=0.1)
+b1 <- seq(-3, 4, by = 0.1)
+z <- outer(b0, b1, function(x,y) mapply(MyRss, x, y))
+
+wireframe(-z,drape = TRUE, colorkey = TRUE, screen = list(z = 20, x = -70, y = 3),
+	xlab = TeX("$\\beta_1$"), ylab = TeX("$\\beta_2$"), 
+	zlab = TeX("$-(Y-X\\hat{\\beta})^2$"), col.regions = viridis::inferno(100))
+
+@
+\end{frame}
+
+
+\begin{frame}{Contours of the least-squares regression surface}
+\Wider[9em]{
+	\begin{figure}
+		\begin{minipage}[h]{0.49\linewidth}
+			\centering
+			\includegraphics[width=\textwidth]{wireframe}
+			%\caption{\texttt{sail}: 7 variables}
+			%\label{fig:a}
+		\end{minipage}
+		%\hspace{0.5cm}
+		\begin{minipage}[h]{0.49\linewidth}
+			\centering
+			\includegraphics[width=\textwidth]{contour1}
+			%\caption{\texttt{lasso}: 13 variables}
+			%\label{fig:b}
+		\end{minipage}
+	\end{figure}
+}
+\end{frame}
+
+
+\begin{frame}[fragile]{code to generate previous plot}
+<<eval=FALSE, echo=TRUE, size='tiny'>>=
+pacman::p_load(viridis,fields,lattice,latex2exp,plotrix)
+
+set.seed(12345)
+b0 <- 0
+b1 <- 1
+b2 <- 2
+X <- cbind(1,replicate(2, rnorm(100)))
+y <- X %*% matrix(c(b0,b1,b2)) + sqrt(2)*rnorm(100)
+
+# Define function for RSS
+MyRss <- function(beta0, beta1) {
+b <- c(0, beta0, beta1)
+rss <- crossprod(y - X %*% b)
+return(rss)
+}
+
+b0 <- seq(-3, 4, by=0.1)
+b1 <- seq(-3, 4, by = 0.1)
+z <- outer(b0, b1, function(x,y) mapply(MyRss, x, y))
+
+fields::image.plot(x = b0, y = b1, z = -z,xlab = TeX("$\\beta_1$"), ylab = TeX("$\\beta_2$"),
+	col = viridis::inferno(100))
+contour(x = b0, y = b1, z = -z,xlab = TeX("$\\beta_1$"), ylab = TeX("$\\beta_2$"),
+	nlevels = 10, add=TRUE)
+abline(v = 0, lty=2)
+abline(h = 0, lty=2)
+
+@
+\end{frame}
+
+
+\begin{frame}{Contours of the least-squares regression surface}
+\Wider[9em]{
+	\begin{figure}
+		\begin{minipage}[h]{0.49\linewidth}
+			\centering
+			\includegraphics[width=\textwidth]{wireframe}
+			%\caption{\texttt{sail}: 7 variables}
+			%\label{fig:a}
+		\end{minipage}
+		%\hspace{0.5cm}
+		\begin{minipage}[h]{0.49\linewidth}
+			\centering
+			\includegraphics[width=\textwidth]{contour2}
+			%\caption{\texttt{lasso}: 13 variables}
+			%\label{fig:b}
+		\end{minipage}
+	\end{figure}
+}
+\end{frame}
+
+\begin{frame}{Contours of the least-squares regression surface}
+\centering
+\includegraphics[scale=0.4]{contour2}
+\end{frame}
+
+\begin{frame}{Constraint region of the lasso}
+\centering
+\includegraphics[scale=0.4]{contour3}
+\end{frame}
+
+\begin{frame}[fragile]{code to generate previous plot}
+<<eval=FALSE, echo=TRUE, size='tiny'>>=
+fields::image.plot(x = b0, y = b1, z = -z,xlab = TeX("$\\beta_1$"), 
+	ylab = TeX("$\\beta_2$"),
+	col = viridis::inferno(100))
+contour(x = b0, y = b1, z = -z,xlab = TeX("$\\beta_1$"), ylab = TeX("$\\beta_2$"),
+	nlevels = 10, add=TRUE)
+points(x = lm.fit(x = X, y = y)$coef[2], y = lm.fit(x = X, y = y)$coef[3], 
+	pch = 19, cex=2, col = "red")
+text(x = lm.fit(x = X, y = y)$coef[2]*1.2, 
+	y = lm.fit(x = X, y = y)$coef[3]*0.80,
+	labels = TeX("$(\\hat{\\beta_1},\\hat{\\beta_2})_{MCO}$"), 
+	cex = 2)
+abline(v = 0)
+abline(h = 0)
+
+conditions <- function(x,y) {
+	c1 <- (abs(x) + abs(y)) <= 1
+	return(c1)}
+
+zz <- expand.grid(x=b0,y=b1)
+zz <- zz[conditions(zz$x,zz$y),]
+
+polygon(c(zz$x[which.min(zz$x)],zz$x[which.max(zz$y)], 
+	zz$x[which.max(zz$x)], zz$x[which.min(zz$y)]), 
+	c(zz$y[which.min(zz$x)],zz$y[which.max(zz$y)], 
+	zz$y[which.max(zz$x)], zz$y[which.min(zz$y)]),
+	col = "grey")
+text(x = 0, y= 0,
+	labels = TeX("$|\\beta_1|+|\\beta_2| \\leq 1$"), cex = 2)
+@
+\end{frame}
+
+
+\begin{frame}{Constraint region of the ridge}
+\centering
+\includegraphics[scale=0.4]{contour_ridge}
+\end{frame}
+
+\begin{frame}[fragile]{code to generate previous plot}
+<<eval=FALSE, echo=TRUE, size='tiny'>>=
+fields::image.plot(x = b0, y = b1, z = -z,xlab = TeX("$\\beta_1$"), 
+	ylab = TeX("$\\beta_2$"),
+	col = viridis::inferno(100))
+contour(x = b0, y = b1, z = -z,xlab = TeX("$\\beta_1$"), ylab = TeX("$\\beta_2$"),
+	nlevels = 10, add=TRUE)
+points(x = lm.fit(x = X, y = y)$coef[2], y = lm.fit(x = X, y = y)$coef[3], 
+	pch = 19, cex=2, col = "red")
+text(x = lm.fit(x = X, y = y)$coef[2]*1.2, 
+	y = lm.fit(x = X, y = y)$coef[3]*0.80,
+	labels = TeX("$(\\hat{\\beta_1},\\hat{\\beta_2})_{MCO}$"), cex = 2)
+abline(v = 0)
+abline(h = 0)
+
+beta2 <- function(x,r=1) {
+	y <- sqrt(r^2 - x^2)
+	return(y)}
+
+xseq <- seq(-1,1, length.out = 100)
+polygon(cbind(c(xseq, rev(xseq)),c(beta2(x=xseq), -beta2(x=xseq))), col = "grey")
+text(x = 0, y= 0,
+	labels = TeX("$\\beta_1^2+\\beta_2^2 \\leq 1^2$"), cex = 2)
+@
+\end{frame}
+
+
+\begin{frame}{Lasso vs. ridge}
+\Wider[5em]{
+	\begin{figure}
+		\begin{minipage}[h]{0.47\linewidth}
+			\centering
+			\includegraphics[width=\textwidth]{contour3}
+			\caption{\texttt{lasso}}
+			\label{fig:a}
+		\end{minipage}
+		%\hspace{0.5cm}
+		\begin{minipage}[h]{0.49\linewidth}
+			\centering
+			\includegraphics[width=\textwidth]{contour_ridge}
+			\caption{\texttt{ridge}}
+			\label{fig:b}
+		\end{minipage}
+	\end{figure}
+}
+\end{frame}
+
+\begin{frame}{Classic version of the previous figure}
+\framedgraphic{classic}
+\blfootnote{\scriptsize{Elements of Statistical Learning}}
+\end{frame}
+
+
+\section{Optimality Conditions}
+
+\begin{frame}{Score functions and penalized score functions}
+
+\begin{itemize}
+	\item In classical statistical theory, the derivative of the log-likelihood function $\mathcal{L}(\theta)$ is called the score function, and maximum likelihood estimators are found by setting this derivative equal to zero, thus yielding the likelihood equations (or score equations): 
+	\[ 0 = \frac{\partial}{\partial \theta} \mathcal{L}(\theta)  \]
+	\pause
+	
+	\item Extending this idea to penalized likelihoods involves taking the
+	derivatives of objective functions of the form:
+	\[\mathbf{Q}(\theta) = \underbrace{\mathcal{L}(\theta)}_{\textrm{likelihood}} + \underbrace{P(\theta)}_{\textrm{penalty}}\] yielding the penalized score function%, où $P(\theta)$ est la fonction de pénalité sur les parametres.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Ridge vs. Lasso penalty}
+<<echo=FALSE>>=
+library(hdrm)
+penalties <- function (range = c(-5, 5), col = c("#FF4E37FF", "#008DFFFF"), 
+parlist = list(mfrow = c(1, 1), mar = c(4, 4, 0.5, 0.5), 
+mgp = c(2, 1, 0), oma = c(0, 0, 2, 0))) {
+op <- par(parlist)
+res <- 99
+x <- seq(range[1], range[2], len = res)
+xx <- seq(0, range[2], len = res)
+matplot(x, cbind(hdrm:::Lasso(x, 1), hdrm:::Ridge(x, 0.3)), type = "l", 
+lwd = 3, lty = 1, col = col, xlab = expression(beta), 
+ylab = expression(P(beta)), xaxt = "n", yaxt = "n", bty = "l")
+# matplot(xx, cbind(dLasso(xx, 1), dRidge(xx, 0.3)), type = "l", 
+#         lwd = 3, lty = 1, col = col, xlab = expression(abs(beta)), 
+#         ylab = expression(P * `'`(abs(beta))), xaxt = "n", yaxt = "n", 
+#         bty = "l")
+#axis(1, at = 0, labels = 0)
+#axis(2, at = c(0, 1), labels = c(0, expression(lambda)), 
+#las = 1)
+hdrm:::toplegend(legend = c("Lasso", "Ridge"), lwd = 3, col = col)
+par(op)
+}
+penalties()
+@
+\end{frame}
+
+
+\begin{frame}{Penalized likelihood equations}
+\small
+\begin{itemize}
+  \setlength\itemsep{0.4em}
+	\item For ridge regression, the penalized likelihood is everywhere differentiable, and the extension to penalized score equations is straightforward
+	\begin{align*}
+	\widehat{\boldsymbol{\beta}}^{ridge} & = \argmin_{\boldsymbol{\beta}} \frac{1}{2} || \mathbf{y} - \mathbf{X}\boldsymbol{\beta}||_2^2  + \lambda ||\beta||_2^2 
+	\end{align*}	
+	%\pause
+	\item For the lasso, the penalized likelihood is not differentiable - specifically, not differentiable at zero - and \textit{subdifferentials} are	needed to characterize them
+	\begin{align*}
+	\widehat{\boldsymbol{\beta}}^{lasso} & = \argmin_{\boldsymbol{\beta}} \mathbf{Q}(\theta) = \argmin_{\beta} \frac{1}{2} || \mathbf{y} - \mathbf{X}\boldsymbol{\beta}||_2^2  + \lambda ||\beta||_1 \label{eq:lassoone2}
+	\end{align*} \pause 
+	\item Letting $\partial \mathbf{Q}(\theta)$ denote the subdifferential of $\mathbf{Q}$, penalized likelihood equations are:
+	\[ 0 \in \partial \mathbf{Q}(\theta)\]
+\end{itemize}
+\blfootnote{\tiny{\url{http://myweb.uiowa.edu/pbreheny/7240/s19/notes/2-13.pdf}}}
+\end{frame}
+
+
+
+\begin{frame}{Karush-Kuhn-Tucker (KKT) Conditions}
+
+\begin{itemize}
+	  \setlength\itemsep{1.2em}
+	\item In the optimization literature, the resulting equations are known as the Karush-Kuhn-Tucker (KKT) conditions \pause 
+	\item For convex optimization problems such as the lasso, the KKT conditions are both necessary and sufficient to characterize the solution \pause %\item 
+	%\item Une preuve rigoureuse de cette affirmation dans plusieurs dimensions
+	%certains des détails que nous avons passés sous silence, mais en appliquant le
+	\item The idea is simple: to solve for $\widehat{\boldsymbol{\beta}}^{lasso}$, we simply replace the
+	derivative with the subderivative and the likelihood with the penalized likelihood
+	
+
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Subdifferential for $|x|$}
+The subdifferential for $f(x) = |x|$ is:
+
+$$
+\partial|x|=\left\{\begin{array}{ll}{-1} & {\text { if } x<0} \\ {[-1,1]} & {\text { if } x=0} \\ {1} & {\text { if } x>0}\end{array}\right.
+$$
+\end{frame}
+
+\begin{frame}{KKT conditions for the lasso}
+
+\begin{itemize}
+	\setlength\itemsep{1.2em}
+	\item \begin{align*}
+	\widehat{\boldsymbol{\beta}}^{lasso} & = \argmin_{\boldsymbol{\beta}} \mathbf{Q}(\theta) = \argmin_{\beta} \frac{1}{2} || \mathbf{y} - \mathbf{X}\boldsymbol{\beta}||_2^2  + \lambda ||\beta||_1 \label{eq:lassoone2}
+	\end{align*}
+	\item \alert{Result:} $\widehat{\boldsymbol{\beta}}^{lasso}$ minimizes the lasso objective function if and only if	it satisfies the KKT conditions:
+		\begin{align*}
+		\frac{1}{n} \mathbf{x}_j^\top (\mathbf{y} - \mathbf{X}\widehat{\boldsymbol{\beta}}) &= \lambda\textrm{sign}(\widehat{\beta}_j) \qquad\qquad \widehat{\beta}_j \neq 0 \\
+		\frac{1}{n} |\mathbf{x}_j^\top (\mathbf{y} - \mathbf{X}\widehat{\boldsymbol{\beta}})| &\leq \lambda \qquad\qquad\qquad\quad \widehat{\beta}_j = 0 
+	\end{align*}  \pause 
+	\item In other words, the correlation between a predictor and the residuals, $\mathbf{x}_j^\top(\mathbf{y} - \mathbf{X}\widehat{\boldsymbol{\beta}})/n$, must exceed a certain minimum
+	threshold $\lambda$ before it is included in the model \pause 
+	\item When this correlation is below $\lambda$, $\widehat{\beta}_j = 0 $
+	
+	
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Some remarks}
+\begin{itemize}	\setlength\itemsep{1.2em}
+	\item If we set 
+	$$
+	\lambda=\lambda_{\max } \equiv \max _{1 \leq j \leq p}\left|\mathbf{x}_{j}^{T} \mathbf{y}\right| / n
+	$$
+	then $\widehat{\bbeta}=0$ satisfies the KKT conditions
+	\item That is, for any $\lambda \geq \lambda_{\max }$, we have $\widehat{\boldsymbol{\beta}}(\lambda)=0$ \pause
+	\item On the other hand, if we set $\lambda=0$, the KKT conditions are simple the normal equations for OLS
+		\begin{align*}
+	\frac{1}{n} \mathbf{x}_j^\top (\mathbf{y} - \mathbf{X}\widehat{\boldsymbol{\beta}}) &= 0 \cdot \textrm{sign}(\widehat{\beta}_j) \qquad\qquad \widehat{\beta}_j \neq 0 
+	\end{align*}\pause
+	\item Thus, the coefficient path for the lasso starts at $\lambda_{\max}$ and continues until $\lambda = 0$ if $\mathbf{X}$ is full rank; otherwise the solution will fail to be unique for $\lambda$ values below some point $\lambda_{\min}$
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Recall the Lasso Solution in the Orthonormal Design }
+
+\begin{itemize}	\setlength\itemsep{1.2em}
+	\item When the design matrix $\mathbf{X}$ is orthonormal, i.e., $n^{-1}\mathbf{X}^\top \mathbf{X}= \mathbf{I}$, the lasso estimate is a \textbf{soft-thresholded} version of the least-squares (LS) estimate $\widehat{\beta}^{LS}$  
+	\begin{align*}
+	\widehat{\beta}^{lasso} & = S_{\lambda}\left( \widehat{\beta}^{LS} \right)= \text{sign}\left( \widehat{\beta}^{LS} \right) \left( |\widehat{\beta}^{LS}| - \lambda \right)_{+} \\  
+	& = \begin{cases} \widehat{\beta}^{LS} - \lambda, &  \widehat{\beta}^{LS} > \lambda \\
+	0 & |\widehat{\beta}^{LS}|  \leq \lambda \\
+	\widehat{\beta}^{LS} + \lambda & \widehat{\beta}^{LS} \leq -\lambda \\
+	\end{cases}
+	\end{align*}
+	\item where $\widehat{\beta}^{LS} = \mathbf{x}_j^\top \mathbf{y} / n$
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Probability that $\hat{\beta}_j = 0$}
+\begin{itemize}	\setlength\itemsep{1.2em}
+	\item With soft thresholding, it is clear that the lasso has a positive	probability of yielding an estimate of exactly 0 - in other	words, of producing a sparse solution
+	\item Specifically, the probability of dropping $\mathbf{x}_j$ from the model is $\mathbb{P}\left(\left|\beta_{j}^{LS}\right| \leq \lambda\right)$
+	\item Under the assumption that $\epsilon_{i} \stackrel{\perp \!\!\! \perp }{\sim} \mathrm{N}\left(0, \sigma^{2}\right)$, we have $\beta_j^{LS} \sim \mathcal{N}(\beta, \sigma^2/n)$ and 
+	$$
+	\mathbb{P}\left(\widehat{\beta}_{j}(\lambda)=0\right)=\Phi\left(\frac{\lambda-\beta}{\sigma / \sqrt{n}}\right)-\Phi\left(\frac{-\lambda-\beta}{\sigma / \sqrt{n}}\right)
+	$$
+	where $\Phi$ is the Gaussian CDF
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[fragile]{Sampling Distribution}
+For $\sigma=1$, $n=10$, and $\lambda = 1/2$:
+
+<<echo=FALSE>>=
+hdrm:::Fig2.3()
+@
+
+\end{frame}
+
+\begin{frame}{Why standard inference is invalid?}
+\begin{itemize}	\setlength\itemsep{1.5em}
+	\item This sampling distribution is very different from that of a classical MLE:
+	\begin{itemize}\setlength\itemsep{1.2em}
+		\item The distribution is mixed: a portion is continuously distributed,	but there is also a point mass at zero
+		\item The continuous portion is not normally distributed
+		\item The distribution is asymmetric (unless $\beta = 0$)
+		\item The distribution is not centered at the true value of $\beta$
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+
+\section{Algorithms}
+
+
+\begin{frame}{Algorithms for the lasso}
+
+\begin{itemize}
+	\setlength\itemsep{1.5em}
+	\item The KKT conditions only allow us to check a solution \pause
+	\item They do not necessarily help us to find the solution in the first place
+\end{itemize}
+
+\end{frame}
+
+
+
+
+\begin{frame}{Coordinate descent$^1$}
+
+%\vspace*{-.35cm} \small
+
+\begin{itemize}
+		\setlength\itemsep{1.5em}
+	\item The idea behind coordinate descent is, simply, to optimize a target function with respect to a single parameter at a time, iteratively cycling through all parameters until convergence is reached
+	\pause 
+	\item Coordinate descent is particularly suitable for problems, like the lasso, that have a simple closed form solution in a single dimension but lack one in higher dimensions
+\end{itemize}
+
+\footnotetext[1]{\scriptsize{Fu (1998), Friedman et al. (2007), Wu and Lange (2008)}}
+\end{frame}
+
+
+\begin{frame}{Coordinate descent}
+\small
+%	\begin{align*}
+%\mathbf{Q}(\theta) = \frac{1}{2n} || \mathbf{y} - \mathbf{X}\boldsymbol{\beta}||_2^2  + \lambda ||\beta||_1 %\label{eq:lassoone3}
+%\end{align*}
+
+
+
+\begin{itemize}
+	\setlength\itemsep{1.2em}
+	\item Let us consider minimizing $\mathbf{Q}$ with respect to $\beta_j$, while temporarily treating the other regression coefficients $\boldsymbol{\beta}_{-j}$ as fixed:
+\begin{align*}
+	\mathbf{Q}(\beta_j|\boldsymbol{\beta}_{-j}) &= \frac{1}{2n} \sum_{i=1}^{n}\left(y_i - \sum_{k \neq j}x_{ij}\beta_k - x_{ij}\beta_j\right)^2 + \lambda |\beta_j| + \lambda \sum_{k \neq j}|\beta_k|
+	\end{align*} \pause 
+\begin{align*}
+\widetilde{\beta}_j  = \argmin_{\beta_j} \mathbf{Q}(\beta_j|\boldsymbol{\beta}_{-j})  = S_{\lambda}(\tilde{z}_{j}) & = \begin{cases} \tilde{z}_{j} - \lambda, &  \tilde{z}_{j} > \lambda \\
+0 & |\tilde{z}_{j}|  \leq \lambda \\
+\tilde{z}_{j} + \lambda & \tilde{z}_{j} < -\lambda \\
+\end{cases}
+\end{align*} \pause 
+	\item	$\tilde{r}_{ij} = y_i - \sum_{k \neq j} x_{ik}\widetilde{\beta}_k \qquad \qquad$  $\tilde{z}_{j} = n^{-1} \sum_{i=1}^{n} x_{ij}\tilde{r}_{ij}$
+	\item $\lbrace \tilde{r}_{ij} \rbrace_{i=1}^n$ are the partial residuals with respect to the $j^{th}$ predictor, and $\tilde{z}_{j}$ OLS estimator based on $\lbrace \tilde{r}_{ij}, x_{ij} \rbrace_{i=1}^n$
+\end{itemize}
+
+
+\end{frame}
+
+
+
+
+
+\begin{frame}{Convergence}
+\begin{itemize}\setlength\itemsep{1.2em}
+	\item Numerical analysis of optimization problems of the form \[\mathbf{Q}(\theta) = \mathcal{L}(\theta) + P(\theta)\] has shown that coordinate descent algorithms converge to a solution of the penalized likelihood equations provided that: \pause
+	\begin{itemize}\setlength\itemsep{1.2em}
+		\item the function $\mathcal{L}(\boldsymbol{\beta})$ is differentiable and 
+		\item the penalty function $P_\lambda(\boldsymbol{\beta})$ is separable $\to P_\lambda(\boldsymbol{\beta}) = \sum_j P_\lambda(\beta_j)$
+	\end{itemize}\pause 
+\item Lasso-penalized linear regression satisfies both of these criteria
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Convergence}
+
+
+
+\begin{itemize}
+\setlength\itemsep{1.2em}
+\item Furthermore, because the lasso objective is a convex function, the sequence of the objective functions $\left\{Q\left(\widetilde{\boldsymbol{\beta}}^{(s)}\right)\right\}$ converges to the global minimum
+\item However, because the lasso objective is not strictly convex, there may be multiple solutions
+\item In such situations, coordinate descent will converge to one of those solutions, but which solution it converges to is	essentially arbitrary, as it depends on the order of the features
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Coordinate descent, pathwise optimization, warm starts}
+
+
+
+\begin{itemize}
+\setlength\itemsep{1.2em}
+\item We are typically interested in determining $\widehat{\boldsymbol{\beta}}^{Lasso}$ for a range of values of $\lambda$, thereby obtaining	the coefficient path
+\item In applying the coordinate descent algorithm to determine the	lasso path, an efficient strategy is to compute solutions for decreasing values of $\lambda$, starting at $\lambda_{\max }=\max _{1 \leq j \leq p}\left|\mathbf{x}_{j}^{T} \mathbf{y}\right| / n$, the point at which all coefficients are 0
+\item Warm starts $\to$ By continuing along a decreasing grid of $\lambda$ values, we can use the solutions $\widehat{\boldsymbol{\beta}}\left(\lambda_{k}\right)$ as initial values when solving for $\widehat{\boldsymbol{\beta}}\left(\lambda_{k+1}\right)$
+\end{itemize}
+
+\end{frame}
+
+
+
+\section{Group Lasso}
+
+\begin{frame}{Motivating Dataset}
+
+\framedgraphic{ukbtable1.pdf}
+
+\end{frame}
+
+\begin{frame}{Groups of Predictors Affect the Response}
+
+\framedgraphic{ukbtable2.pdf}
+
+\end{frame}
+
+\begin{frame}{Group lasso for Categorical variables and Basis expansions}
+
+\vspace*{-0.15cm} Useful for groups of variables (factor with
+\(> 2\) categories, \(Age\), \(Age^2\)). \textbf{Group lasso} estimator is: \[
+\underset{(\beta_{0},\boldsymbol{\beta})}{\min}\frac{1}{2}\left\Vert \mathbf{y}-\beta_{0}-\mathbf{X}\boldsymbol{\beta}\right\Vert _{2}^{2}+\lambda\sum_{k=1}^{K}\sqrt{p_{k}}\Vert\boldsymbol{\beta}^{(k)}\Vert_{2}\qquad p_{k}-\mathrm{taille\ de\ group}
+\]
+
+\vspace*{-0.25cm}
+
+\begin{figure}
+	\centering
+	\hspace*{-0.50cm}
+	\subfloat[Lasso \label{fig:1}]{
+		\resizebox{165pt}{!}{
+			\begin{tikzpicture}[inner sep=0.2cm]
+			\def \radi{4}
+			\def \x{3}
+			\def \y{3}
+			\def \z{3}
+			
+			\begin{scope}[isometricYXZ]
+			% the grid
+			\begin{scope}[color=gray!50, thin]
+			\foreach \xi in {0,...,\radi}{ \draw (\xi,\radi,0) -- (\xi,0,0) -- (\xi,0,\radi); }%
+			\foreach \yi in {1,...,\radi}{ \draw (0,\yi,\radi) -- (0,\yi,0) -- (\radi,\yi,0); }%
+			\foreach \zi in {0,...,\radi}{ \draw (0,\radi,\zi) -- (0,0,\zi) -- (\radi,0,\zi); }%
+			\end{scope}
+			
+			\draw[-latex, ultra thick, color=blue] (0,0,0) -- (5,0,0) node[anchor=west] {\Large linéaire};%
+			\draw[-latex, ultra thick, color=red] (0,0,0) -- (0,5,0) node[anchor=north] {\Large quadratique};%
+			\draw[-latex, ultra thick, color=black] (0,0,0) -- (0,0,5) node[anchor=east] {\Large solde d'une carte de crédit};%
+			
+			\fill[color=magenta, opacity=0.2] (0,0,0) -- (\x,0,0) -- (\x,\y,0) -- (0,\y,0) -- cycle; %
+			\fill[color=yellow, opacity=0.2] (0,0,0) -- (0,0,\z) -- (0,\y,\z) -- (0,\y,0) -- cycle; %
+			\fill[color=cyan, opacity=0.2] (0,0,0) -- (\x,0,0) -- (\x,0,\z) -- (0,0,\z) -- cycle;
+			
+			\draw[color=gray, thick]%
+			(0,\y,\z) -- (\x,\y,\z) -- (\x,\y,0) (\x,\y,\z) -- (\x,0,\z);%
+			\end{scope}
+			
+			%\shade[ball color=yellow] ($\y*(-1.299cm,-0.75cm)+(\x,\z)$) circle (0.1);%
+			\node[circle, minimum width=1cm, inner sep=0pt, outer sep=0pt, ball color=blue!20!white,opacity=0.90] (H-1) at ($\y*(-1.299cm,-0.75cm)+(0,\z)$) {\large \bfseries age};
+			\node[circle, minimum width=2*\ab cm, inner sep=0pt, outer sep=0pt, ball color=blue!50!green!20!white,opacity=.9] (H-1) at (0,0,0) {\bfseries poids};
+			\end{tikzpicture}
+		}
+	}
+	\subfloat[Groupe lasso \label{fig:2}]{
+		\resizebox{165pt}{!}{
+			\begin{tikzpicture}[inner sep=0.2cm]
+			\def \radi{4}
+			\def \x{3}
+			\def \y{3}
+			\def \z{3}
+			
+			\begin{scope}[isometricYXZ]
+			% the grid
+			\begin{scope}[color=gray!50, thin]
+			\foreach \xi in {0,...,\radi}{ \draw (\xi,\radi,0) -- (\xi,0,0) -- (\xi,0,\radi); }%
+			\foreach \yi in {1,...,\radi}{ \draw (0,\yi,\radi) -- (0,\yi,0) -- (\radi,\yi,0); }%
+			\foreach \zi in {0,...,\radi}{ \draw (0,\radi,\zi) -- (0,0,\zi) -- (\radi,0,\zi); }%
+			\end{scope}
+			
+			\draw[-latex, ultra thick, color=blue] (0,0,0) -- (5,0,0) node[anchor=west] {\Large linéaire};%
+			\draw[-latex, ultra thick, color=red] (0,0,0) -- (0,5,0) node[anchor=north] {\Large quadratique};%
+			\draw[-latex, ultra thick, color=black] (0,0,0) -- (0,0,5) node[anchor=east] {\Large solde d'une carte de crédit};%
+			
+			\fill[color=magenta, opacity=0.2] (0,0,0) -- (\x,0,0) -- (\x,\y,0) -- (0,\y,0) -- cycle; %
+			\fill[color=yellow, opacity=0.2] (0,0,0) -- (0,0,\z) -- (0,\y,\z) -- (0,\y,0) -- cycle; %
+			\fill[color=cyan, opacity=0.2] (0,0,0) -- (\x,0,0) -- (\x,0,\z) -- (0,0,\z) -- cycle;
+			
+			\draw[color=gray, thick]%
+			(0,\y,\z) -- (\x,\y,\z) -- (\x,\y,0) (\x,\y,\z) -- (\x,0,\z);%
+			\end{scope}
+			
+			%\shade[ball color=yellow] ($\y*(-1.299cm,-0.75cm)+(\x,\z)$) circle (0.1);%
+			\node[circle, minimum width=1cm, inner sep=0pt, outer sep=0pt, ball color=blue!20!white,opacity=0.90] (H-1) at ($\y*(-1.299cm,-0.75cm)+(\x,\z)$) {\large \bfseries age};
+			\node[circle, minimum width=2*\ab cm, inner sep=0pt, outer sep=0pt, ball color=blue!50!green!20!white,opacity=.9] (H-1) at (0,0,0) {\bfseries poids};
+			\end{tikzpicture}
+		}
+		
+	}
+	%\caption{Caption.}
+	\label{fig:caption}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Group Lasso Model}
+
+\vspace*{-.3cm} \small
+
+\begin{itemize}
+	\item Assume the predictors in $\bX \in \mathbb{R}^{n \times p}$ belong to $K$ \textbf{non-overlapping groups} with \textbf{pre-defined} group membership and cardinality $p_{k}$
+	\item Let $\bbeta_{(k)}$ to denote the segment of $\bbeta$ corresponding to group $k$ \pause
+	\item We consider the group lasso penalized estimator 
+	\begin{equation}
+	\min_{\bbeta} L(\bbeta|\bD)+\lambda\sum_{k=1}^{K}w_{k}\|\bbk\|_{2},\label{eq:wlslasso}
+	\end{equation} 
+	\item where 
+	\begin{equation}
+	L(\bbeta\mid\bD)=\frac{1}{2}\left[\bY-\widehat{\bY}\right]^{\top}\mathbf{W}\left[\bY-\widehat{\bY}\right]
+	\end{equation}
+	$\widehat{\bY}=\sum_{j=1}^{p}\beta_{j}X_{j}$, $\bD$ is the working data $\lbrace \bY, \bX \rbrace$, and
+	$\bW_{n \times n}$ is an observation weight matrix
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Groupwise Descent: Exploiting Sparsity Structure}
+
+\small
+
+Minimize the objective function \[
+\frac{1}{2}\left[\bY-\widehat{\bY}\right]^{\top}\mathbf{W}\left[\bY-\widehat{\bY}\right]+\lambda\sum_{k=1}^{K}w_{k}\Vert\boldsymbol{\beta}^{(k)}\Vert_{2}
+\] \pause During each sub-iteration only optimize \(\bbeta^{(k)}\). Set
+\(\bbeta^{(k^{\prime})}=\widetilde{\bbeta}^{(k^{\prime})}\) for
+\(k^{\prime}\ne k\) at their current value.\\
+
+\begin{enumerate}
+\item Initialization: $\widetilde{\bbeta}$ \pause 
+\item Cyclic groupwise descent: for $k=1,2,\ldots,K$,
+update $\bbeta^{(k)}$ by minimizing the objective function
+
+\[
+\widetilde{\bbeta}^{(k)}(\textrm{new})\leftarrow\arg\min_{\boldsymbol{\beta}^{(k)}}L(\bbeta\mid\bD)+\lambda w_{k}\Vert\bbeta^{(k)}\Vert_{2}
+\]
+\pause 
+\item Repeat (2) till convergence.
+\end{enumerate}
+
+\end{frame}
+
+\begin{frame}{Quadratic Majorization Condition}
+
+\vspace*{-0.25cm}
+
+\begin{equation}
+\argmin_{\boldsymbol{\beta}^{(k)}}\frac{1}{2}\left[\bY-\widehat{\bY}\right]^{\top}\mathbf{W}\left[\bY-\widehat{\bY}\right]+\lambda\sum_{k=1}^{K}w_{k}\Vert\boldsymbol{\beta}^{(k)}\Vert_{2} \label{eq:qmcond}
+\end{equation}
+
+\vspace*{-0.25cm}
+
+\begin{itemize}
+\item Unfortunately, there is no closed form solution to \eqref{eq:qmcond} \pause 
+\item However, the loss function $L(\bbeta|\bD)$ satisfies the quadratic majorization (QM) condition$^1$, since there exists
+\begin{itemize}
+\item a $p\times p$ matrix $\bH=\bX^{\top}\mathbf{W}\bX$, and 
+\item $\nabla L(\bbeta|\bD)=-\left(Y-\hat{Y}\right)^{\top}\mathbf{W}\bX$
+\end{itemize}
+which may only depend on the data $\bD$, such that for all $\bbeta,\bbeta^{*}$,
+\small
+\begin{equation*}
+L(\bbeta\mid\bD)\le L(\bbeta^{\ast}\mid\bD)+(\bbeta-\bbeta^{\ast})^{\trans}\nabla L(\bbeta^{\ast}|\bD)+\frac{1}{2}(\bbeta-\bbeta^{\ast})^{\trans}\bH(\bbeta-\bbeta^{*})\label{QM1}
+\end{equation*}
+\end{itemize}
+
+\footnotetext[1]{\scriptsize{Yang and Zou. Statistical Computing (2014)}}
+
+\end{frame}
+
+\begin{frame}{Generalized Coordinate Descent (GCD)}
+
+\vspace*{-.35cm} \centering
+\framedgraphic{maj-crop.pdf}
+
+\end{frame}
+
+\begin{frame}{Groupwise Majorization Descent}
+
+\vspace*{-.35cm} \footnotesize
+
+\begin{itemize}
+\item Update $\bbeta$ in a \alert{groupwise fashion}
+\[
+\bbeta-\widetilde{\bbeta}=(\underbrace{0,\ldots,0}_{k-1},\bbeta^{(k)}-\widetilde{\bbeta}^{(k)},\underbrace{0,\ldots,0}_{K-k})
+\] \pause 
+\item Only need to compute the majorization function \alert{on group level}
+\begin{align*}
+L(\bbeta\mid\bD)& \leq L(\widetilde{\bbeta}\mid\bD)-(\bbeta^{(k)}-\widetilde{\bbeta}^{(k)})^{\trans}U^{(k)}+\frac{1}{2}\gamma_{k}(\bbeta^{(k)}-\widetilde{\bbeta}^{(k)})^{\trans}(\bbeta^{(k)}-\widetilde{\bbeta}^{(k)}) \\
+U^{(k)} & =\frac{\partial}{\partial\bbk}L(\bbeta\mid\bD)=-\left(Y-\hat{Y}\right)^{\top}\mathbf{W}\mathbf{X}_{(k)}\\
+\mathbf{H}^{(k)} & =\frac{\partial^{2}}{\partial\bbk\partial\bbk^{\top}}L(\bbeta\mid\bD)=\mathbf{X}_{(k)}^{\top}\mathbf{W}\mathbf{X}_{(k)}
+\end{align*}
+\item $\gamma_{k}=\mathrm{eigen_{\max}}(\bH^{(k)})$ \pause  
+
+\item Update $\widetilde{\bbeta}^{(k)}$ with a \structure{fast} operation:
+\[
+\widetilde{\bbeta}^{(k)}(\textrm{new})=\frac{1}{\gamma_{k}}\left(U^{(k)}+\gamma_{k}\widetilde{\bbeta}^{(k)}\right)\Bigg(1-\frac{\lambda w_{k}}{\Vert U^{(k)}+\gamma_{k}\widetilde{\bbeta}^{(k)}\Vert_{2}}\Bigg)_{+}
+\]
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Lasso vs. Group Lasso}
+
+\begin{itemize}
+	\item {\footnotesize{}Logistic regression with group lasso: $n=50,$ $p=6$.}{\footnotesize\par}
+	\item {\footnotesize{}Group lasso: specify $(\beta_{1},\beta_{2},\beta_{3}),\ (\beta_{4},\beta_{5},\beta_{6})$.
+		Variable selection \structure{at the group level}. }{\footnotesize\par}
+	\item {\footnotesize{}Solution path: view $\boldsymbol{\beta}$ as function
+		of $\lambda$.}{\footnotesize\par}
+\end{itemize}
+\begin{center}
+	\includegraphics[scale=0.4]{grouplasso}
+	\par\end{center}
+
+\end{frame}
+
+\section{Generalizations of the Lasso}
+
+\begin{frame}{Generalizations of the Lasso Penalty}
+
+Generalized penalties arise in a wide variety of settings:
+\begin{itemize}
+	\item \textbf{Group lasso, Hierarchical group lasso:} handle structurally grouped
+	features. e.g. dummy variables.
+	\item \textbf{Adaptive lasso: }a lasso with the Oracle property.
+	\item \textbf{Elastic net:} handle highly correlated features. e.g. genes.
+	\item \textbf{SCAD and MCP: }non-convex penalties with the Oracle property.
+	\item \textbf{Multitask lasso: }handle between-tasks sparsity while allowing within-task sparsity.
+\end{itemize}
+\end{frame}
+
+
+%
+\begin{frame}{Asymptotic Properties}
+\begin{itemize}
+\item Consider $y_{i}=\bx_{i}^{\top}\bbeta^{*}+\epsilon_{i}$, $\bbeta^{*}=(\beta_{1}^{*}\ddd\beta_{p}^{*})$,
+$\epsilon_{i}\sim D(0,\sigma^{2})$ .
+\item $\cA^{*}=\{j:\beta_{j}^{*}\neq0\}$ \textendash{} the support of $\bbeta^{*}$ 
+\item $\cA_{n}=\{j:\hat{\beta}_{j}\neq0\}$ \textendash{} the support of
+the penalized estimator $\hat{\bbeta}_{n}=(\hat{\beta}_{n,1}\ddd\hat{\beta}_{n,p})$. 
+\item \textbf{Oracle Property}: an important property that any penalized
+estimator $\hat{\bbeta}_{n}$ should possess
+\begin{itemize}
+	\item \emph{Variable selection consistency:
+		\[
+		\lim_{n\rightarrow\infty}P(\cA_{n}\rightarrow\cA^{*})=1
+		\]
+	}
+	\item \emph{$\sqrt{n}$-estimation consistency:
+		\[
+		\sqrt{n}(\hat{\bbeta}_{n,\cA^{*}}-\bbeta_{A^{*}}^{*})\stackrel{d}{\rightarrow}\mathcal{N}(\mathbf{0},\boldsymbol{\Sigma}_{0})
+		\]
+	}where $\boldsymbol{\Sigma}_{0}$ is the covariance matrix knowing
+	the true subset model. 
+\end{itemize}
+\end{itemize}
+\end{frame}
+%
+\begin{frame}{Adaptive Lasso}
+
+The adaptive lasso estimator
+
+\begin{equation}
+\bh^{\mathrm{alasso}}=\mathrm{arg}\underset{\bbeta}{\min}\frac{1}{2}\|\by-\bX\bbeta\|^{2}+\lambda_{n}\sum_{j=1}^{p}\hat{w}_{j}|\beta_{j}|,\label{eq:qpenalty-1-1}
+\end{equation}
+where $\hat{w}_{j}=\frac{1}{|\hat{\beta}_{j}|^{\gamma}}$ for some
+$\gamma>0$ and a $\sqrt{n}$-consistent estimator $\hat{\beta}_{j}$
+of $\beta_{j}$. 
+\begin{itemize}
+\item For Lasso, if an irrelevant variable is highly correlated with variables
+in the true model, the lasso may fail to distinguish it from the true
+variables even with large $n$. 
+\item As $n\rightarrow\infty$, the weights corresponding to insignificant
+variables tend to infinity, while the weights corresponding to significant
+variables converge to a finite constant. 
+\item Zou (2006) showed that, under certain regularity conditions, the adaptive
+lasso has the \textbf{oracle property}.
+\end{itemize}
+\end{frame}
+%
+\begin{frame}{Elastic Net}
+
+The \textbf{elastic net} (Zou and Hastie, 2005) solves the convex
+program
+
+\[
+\underset{\bbeta}{\min}\frac{1}{2}\|\by-\bX\bbeta\|^{2}+\lambda\left[\frac{1}{2}(1-\alpha)\|\bbeta\|_{2}^{2}+\alpha\|\bbeta\|_{1}\right]
+\]
+where $\alpha\in[0,1]$ is a parameter. The penalty applied to an
+individual coefficient (disregarding the regularization weight $\lambda>0$)
+is given by
+\[
+\frac{1}{2}(1-\alpha)\beta_{j}^{2}+\alpha|\beta_{j}|.
+\]
+
+\begin{itemize}
+\item The coefficients are selected approximately together in their groups.
+\item The coefficients approximately share their values equally.
+\end{itemize}
+\end{frame}
+%
+\begin{frame}{An illustration example}
+\begin{itemize}
+\item Two independent ``hidden'' factors $\mathbf{z}_{1}$ and $\mathbf{z}_{2}$
+\[
+\mathbf{z}_{1}\sim U(0,20),\qquad\mathbf{z}_{2}\sim U(0,20)
+\]
+\item Generate the response vector $\by=\bz_{1}+0.1\cdot\bz_{2}+N(0,1)$
+\item Suppose only observe predictors
+\[
+\bx_{1}=\bz_{1}+\epsilon_{1},\quad\bx_{2}=\bz_{1}+\epsilon_{2},\quad\bx_{3}=\bz_{1}+\epsilon_{3}
+\]
+\[
+\bx_{4}=\bz_{2}+\epsilon_{4},\quad\bx_{5}=\bz_{2}+\epsilon_{5},\quad\bx_{6}=\bz_{2}+\epsilon_{6}
+\]
+\item Fit the model on $(\bX,\by)$
+\item An \textquotedblleft oracle\textquotedblright{} would identify $\bx_{1}$,
+$\bx_{2}$ and $\bx_{3}$ (the $\bz_{1}$ group) as the most important
+variables.
+\end{itemize}
+\end{frame}
+%
+\begin{frame}[fragile]{Simulation 1}
+\begin{center}
+\includegraphics[scale=0.4]{enet1}
+\par\end{center}
+
+\end{frame}
+
+\begin{frame}{Simulation 2}
+\begin{center}
+\includegraphics[scale=0.4]{enet2}
+\par\end{center}
+
+\end{frame}
+
+
+\begin{frame}{Hierarchical Group Lasso}
+
+\includegraphics[scale=0.5]{hie}\\
+(Jenatton, Mairal, Obozinski, and Bach 2010)
+\end{frame}
+
+%
+\begin{frame}{Multitask Lasso}
+
+{\footnotesize{}Suppose that we have $K$ regression tasks 
+\[
+Y^{(k)}=\bX^{(k)}\bbeta^{(k)}+\epsilon^{(k)},\qquad k=1\ddd K.
+\]
+}{\footnotesize\par}
+\begin{itemize}
+\item {\footnotesize{}The $k$-th task has $n_{k}$ observations for $k=1\ddd K$}{\footnotesize\par}
+\item {\footnotesize{}$Y^{(k)}=(y_{1}^{(k)}\ddd y_{n_{k}}^{(k)})^{\intercal}$,
+$X_{j}^{(k)}=(x_{1j}^{(k)}\ddd x_{n_{k}j}^{(k)})^{\top}$}{\footnotesize\par}
+\item {\footnotesize{}$\mathbf{X}^{(k)}=(X_{1}^{(k)}\ddd X_{p}^{(k)})$
+be the $n_{k}\times p$ design matrix for task $k$}{\footnotesize\par}
+\item {\footnotesize{}$\bbeta^{(k)}=(\beta_{1}^{(k)},\cdots,\beta_{p}^{(k)})^{\top}$
+and $\bbeta_{j}=(\beta_{j}^{(1)},\cdots,\beta_{j}^{(K)})^{\top}$}{\footnotesize\par}
+\item {\footnotesize{}find commonly shared relevant covariates and retains
+the ability to recover covariates unique to individual data sources.}{\footnotesize\par}
+\end{itemize}
+{\footnotesize{}
+\[
+\underset{\bbeta}{\min}\frac{1}{2}\sum_{k=1}^{K}\Bigl\Vert Y^{(k)}-\bX^{(k)}\bbeta^{(k)}\Bigr\Vert^{2}+\lambda P_{\alpha}(\bbeta),
+\]
+\[
+P_{\alpha}(\bbeta)=\sum_{j=1}^{p}w_{j}\left[(1-\alpha)||\bbeta_{j}||_{q}+\alpha||\bbeta_{j}||_{1}\right]
+\]
+}{\footnotesize\par}
+\end{frame}
+%
+
+%
+
+
+\begin{frame}{Recall the bias of the lasso}
+\begin{center}
+	\ctable[pos=h!,doinside=\footnotesize]{lcc}{
+	}{
+		\FL
+		q & Estimator      & Formula \ML
+		1 & Lasso & $\textrm{sign}(\widehat{\beta}_j^{LS}) (|\widehat{\beta}_j^{LS}| - \lambda)_+$  \\
+		2 & Ridge & $\widehat{\beta}_j^{LS} / (1 + \lambda)$  \LL   }
+\end{center}
+
+\framedgraphic{ridgelasso}
+\end{frame}
+
+
+
+\begin{frame}{SCAD (Fan et Li, JASA, 2001), MCP (Zhang, Ann. Stat., 2010)}
+\framedgraphic{scad}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+\begin{frame}{Discussion}
+
+\begin{itemize}
+	\setlength\itemsep{1.2em}
+	\item Variable selection is an active area of research
+	 \item Few inference tools exist
+	 \item Robust software has been developed, but more scalable algorithms and implementations are needed
+\end{itemize}
+
+\end{frame}
+
+
+
+\begin{frame}{References}
+
+\begin{itemize}
+	\item \scriptsize{Fan, J. and Li, R., 2001. Variable selection via nonconcave penalized likelihood and its oracle properties. Journal of the American statistical Association, 96(456), pp.1348-1360.}
+	
+	\item \scriptsize{Tibshirani, R., 1996. Regression shrinkage and selection via the lasso. Journal of the Royal Statistical Society: Series B (Methodological), 58(1), pp.267-288.}
+	
+	\item \scriptsize{Friedman, J., Hastie, T., Höfling, H. and Tibshirani, R., 2007. Pathwise coordinate optimization. The annals of applied statistics, 1(2), pp.302-332.}
+	
+	\item \scriptsize{Buhlmann, P. \& van de Geer, S. (2011), Statistics for High-Dimensional Data, Springer.}
+	
+	\item \scriptsize{Breheny, P. \href{http://myweb.uiowa.edu/pbreheny/7240/s19/notes.html}{BIOS 7240 class notes (accessed March 15, 2019).}}
+	
+	\item \scriptsize{Tibshirani, R. \href{http://www.stat.cmu.edu/~larry/=sml/sparsity.pdf}{A Closer Look at Sparse Regression (accessed March 15, 2019).}}
+	
+	\item \scriptsize {Gaillard, P. and Rudi, A. \href{https://www.di.ens.fr/appstat/spring-2019/}{Introduction to Machine Learning (accessed March 15, 2019).}}
+	
+	\item \scriptsize{Hastie, T., Tibshirani, R. \& Friedman, J. (2009), The Elements of Statistical Learning; Data Mining, Inference and Prediction, Springer. Second edition.}
+	
+		\item \scriptsize{Hastie, T., Tibshirani, R. \& Wainwright, M. (2015), Statistical Learning with Sparsity:
+			the Lasso and Generalizations, Chapman \& Hall.}
+\end{itemize}
+
+slides available at \large{\url{https://sahirbhatnagar.com/talks/}}
+
+\end{frame}
+
+
+\begin{frame}{Contexte sur la validation croisée}
+
+\Wider[4em]{
+	\includegraphics[scale=0.60]{train_test_7.pdf}
+}
+
+\end{frame}
+
+\begin{frame}{SCAD}
+\subsection{SCAD:Smoothly clipped absolute Deviation, Fan and Li, 2001}
+
+\[  p'(|\beta|;\lambda) = \lambda sign(\beta_j) \left\{ I_{(|\beta_j|\leq \lambda)} + \frac{(a\lambda - |\beta_j|)_+}{(a-1)\lambda} I_{(|\beta_j| > \lambda)}     \right\}, \quad a>2   \]
+
+
+The penalty is expressed in terms of its derivative. The SCAD is a combination of the HARD, LASSO, and Clipped penalties. 
+
+This leads to the solution
+
+\begin{align*}
+\bh_{j,SCAD} = 
+\begin{cases}
+sign(\bh_{j,OLS})(|\bh_{j,OLS}|-\lambda)_+ & |\bh_{j,OLS}| \leq 2 \lambda \\
+\frac{(a-1)\bh_{j, OLS} - sign(\bh_{j, OLS})a \lambda  }{a-2} &   2\lambda < |\bh_{j, OLS}| \leq a \lambda \\
+\bh_{j, OLS} & |\bh_{j, OLS}| > a \lambda
+\end{cases}
+\end{align*}
+
+\end{frame}
+
+
+\begin{frame}{MCP, Zhang (2010)}
+
+\begin{align*}
+p(|\beta|_j;\lambda, \gamma) =  
+\begin{cases}
+\lambda |\beta_j| - \frac{|\beta_j|^2}{2\gamma} & |\beta_j| \leq \gamma \lambda\\
+\frac{\gamma \lambda^2}{2} & |\beta_j| > \gamma \lambda
+\end{cases}
+\end{align*}
+
+\end{frame}
+
+\end{document}
+
