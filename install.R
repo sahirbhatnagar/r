@@ -6,5 +6,5 @@
 #install.packages("knitr")
 install.packages("glmnet")
 install.packages("gglasso")
-install.packages("ncvreg")
+#install.packages("ncvreg")
 
