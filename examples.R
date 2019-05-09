@@ -3,17 +3,19 @@
 
 # install.packages("glmnet", repos = "http://cran.us.r-project.org")
 
-# load the glmnet package:
+# load the glmnet package and gglasso package for bardet data:
 
 library(glmnet)
+library(gglasso)
 
 # The default model used in the package is the Guassian linear
 # model or "least squares", which we will demonstrate in this
 # section. We load a set of data created beforehand for
-# illustration. Users can either load their own data or use
-# those saved in the workspace.
-getwd()
-load("Bardet.rda")
+# illustration. 
+help("bardet")
+data("bardet")
+x <- bardet$x
+y <- bardet$y
 
 # The command loads an input matrix x and a response
 # vector y from this saved R data archive.
@@ -239,7 +241,19 @@ fit = glmnet(x, y, alpha = 0.2, family="gaussian")
 
 plot(fit, xvar = "lambda", label = TRUE)
 
+## ---- elastic-net-example2 ----
 
+foldid=sample(1:10,size=length(y),replace=TRUE)
+cv1=cv.glmnet(x,y,foldid=foldid,alpha=1)
+cv.5=cv.glmnet(x,y,foldid=foldid,alpha=.5)
+cv0=cv.glmnet(x,y,foldid=foldid,alpha=0)
+
+par(mfrow=c(2,2))
+plot(cv1);plot(cv.5);plot(cv0)
+plot(log(cv1$lambda),cv1$cvm,pch=19,col="red",xlab="log(Lambda)",ylab=cv1$name)
+points(log(cv.5$lambda),cv.5$cvm,pch=19,col="grey")
+points(log(cv0$lambda),cv0$cvm,pch=19,col="blue")
+legend("topleft",legend=c("alpha= 1","alpha= .5","alpha 0"),pch=19,col=c("red","grey","blue"))
 
 ## ---- group-lasso ----
 
