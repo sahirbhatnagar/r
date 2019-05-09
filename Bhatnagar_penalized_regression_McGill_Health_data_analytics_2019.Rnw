@@ -235,11 +235,11 @@ pacman::p_load(mosaic)
 \begin{frame}{Outline}
 \begin{itemize}
 		  \setlength\itemsep{1.2em}
-	\item Les modèles classiques 
-	\item Miser sur la sparsité
-	 \item Un exemple justificatif
-	 \item Contexte de la méthode lasso
-	 \item Extensions 
+	\item Classical statistical models
+	\item Bet on sparsity
+	 \item A motivating example
+	 \item Background on the lasso and group lasso
+	 \item Generalizations 
 \end{itemize}
 
 %\pause
