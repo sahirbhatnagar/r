@@ -1,28 +1,13 @@
-# Specifying an R environment with a runtime.txt file
+# McGill Summer School in Health Data Analytics
 
-Jupyter+R: [![Binder](http://mybinder.org/badge_logo.svg)](http://mybinder.org/v2/gh/sahirbhatnagar/mcgillHDA/master?filepath=index.ipynb)
+## Data analysis using penalized regression methods
+
+In high-dimensional (HD) data, where the number of covariates (p) greatly exceeds the number of observations (n), estimation can benefit from the bet-on-sparsity principle, i.e., only a small number of predictors are relevant in the response. This assumption can lead to more interpretable models, improved predictive accuracy, and algorithms that are computationally efficient. In medical data, where the sample sizes are particularly small due to high data collection costs, we must often assume a sparse model because there isn’t enough information to estimate p parameters. For these reasons, penalized regression methods have generated substantial interest over the past decade since they can set model coefficients exactly to zero. We will provide an overview of the lasso and group-lasso; two of the most popular penalized regressions techniques available. We will provide details on both the theoretical and computational aspects of these methods and demonstrate a real-data example with R code.
+
 
 RStudio: [![Binder](http://mybinder.org/badge_logo.svg)](http://mybinder.org/v2/gh/sahirbhatnagar/mcgillHDA/master?urlpath=rstudio)
 
+[Slides](https://github.com/sahirbhatnagar/mcgillHDA/raw/master/Bhatnagar_penalized_regression_McGill_Health_data_analytics_2019.pdf)
 
 
-Binder supports using R and RStudio, with libraries pinned to a specific
-snapshot on [MRAN](https://mran.microsoft.com/documents/rro/reproducibility).
 
-You need to have a `runtime.txt` file that is formatted like:
-
-```
-r-<YYYY>-<MM>-<DD>
-```
-
-where YYYY-MM-DD is a snapshot at MRAN that will be used for installing
-libraries.
-
-You can also have an `install.R` file that will be executed during build,
-and can be used to install libraries.
-
-Both [RStudio](https://www.rstudio.com/) and [IRKernel](https://irkernel.github.io/)
-are installed by default, so you can use either the Jupyter notebook interface or
-the RStudio interface.
-
-This repository also contains an example of a Shiny app.
